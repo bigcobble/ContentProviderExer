@@ -16,6 +16,9 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
+        <provider
+            android:authorities="com.fei.contentproviderexer"
+            android:name=".database.PersonContentProvider"/>
     </application>
 
 </manifest>
