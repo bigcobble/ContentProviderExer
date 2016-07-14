@@ -24,4 +24,26 @@ public class PersonDao {
 
         return id;
     }
+
+    public int bulkInsertPerson() {
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        int returnCount = 0;
+        db.beginTransaction();
+        try {
+            for (int i = 0; i < 20; i++) {
+                ContentValues cv = new ContentValues();
+                cv.put(Person.COLUMN_NAME, "lsx" + i);
+                cv.put(Person.COLUMN_NUMBER, "123" + i);
+                long id = db.insert(Person.TABLE_NAME, null, cv);
+                if (id != -1) {
+                    returnCount++;
+                }
+            }
+            db.setTransactionSuccessful();
+        } finally {
+            db.endTransaction();
+        }
+
+        return returnCount;
+    }
 }

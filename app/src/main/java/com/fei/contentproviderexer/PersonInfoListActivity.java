@@ -13,6 +13,6 @@ public class PersonInfoListActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_info_list);
-        new PersonDao(this).insertPerson("lsx", "223");
+        new PersonDao(this).bulkInsertPerson();
     }
 }
