@@ -3,6 +3,8 @@ package com.fei.contentproviderexer;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
@@ -22,9 +24,8 @@ public class PersonInfoListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_person_info_list);
         mListView = (ListView) findViewById(R.id.activity_person_info_list_view);
-        new PersonDao(this).bulkInsertPerson();
+        //new PersonDao(this).bulkInsertPerson();
         setupAdapter();
-
     }
 
     private void setupAdapter() {
@@ -41,5 +42,26 @@ public class PersonInfoListActivity extends AppCompatActivity {
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 mPersonInfoList);
         mListView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_person_infor, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.activity_person_info_bulk_add:
+                new PersonDao(this).bulkInsertPerson();
+                setupAdapter();
+
+                break;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+
+        return true;
     }
 }
