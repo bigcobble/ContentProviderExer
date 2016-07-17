@@ -4,7 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 
-import com.fei.contentproviderexer.database.PersonContract.Person;
+import com.fei.contentproviderexer.database.PersonContract.PersonTable;
 
 /**
  * Created by lee on 2016/7/14.
@@ -17,9 +17,9 @@ public class PersonDao {
     public long insertPerson(String name, String number) {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         ContentValues cv = new ContentValues();
-        cv.put(Person.COLUMN_NAME, name);
-        cv.put(Person.COLUMN_NUMBER, number);
-        long id = db.insert(Person.TABLE_NAME, null, cv);
+        cv.put(PersonTable.COLUMN_NAME, name);
+        cv.put(PersonTable.COLUMN_NUMBER, number);
+        long id = db.insert(PersonTable.TABLE_NAME, null, cv);
         db.close();
 
         return id;
@@ -32,9 +32,9 @@ public class PersonDao {
         try {
             ContentValues cv = new ContentValues();
             for (int i = 0; i < 20; i++) {
-                cv.put(Person.COLUMN_NAME, "lsx" + i);
-                cv.put(Person.COLUMN_NUMBER, "123" + i);
-                long id = db.insert(Person.TABLE_NAME, null, cv);
+                cv.put(PersonTable.COLUMN_NAME, "lsx" + i);
+                cv.put(PersonTable.COLUMN_NUMBER, "123" + i);
+                long id = db.insert(PersonTable.TABLE_NAME, null, cv);
                 if (id != -1) {
                     returnCount++;
                 }

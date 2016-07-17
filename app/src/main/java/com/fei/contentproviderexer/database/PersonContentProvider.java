@@ -10,7 +10,7 @@ import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
-import com.fei.contentproviderexer.database.PersonContract.Person;
+import com.fei.contentproviderexer.database.PersonContract.PersonTable;
 
 /**
  * Created by lee on 2016/7/14.
@@ -35,12 +35,12 @@ public class PersonContentProvider extends ContentProvider {
         SQLiteDatabase db = mDbHelper.getWritableDatabase();
         switch (sUriMatcher.match(uri)) {
             case PERSON:
-                cursor = db.query(Person.TABLE_NAME, projection, selection, selectionArgs,
+                cursor = db.query(PersonTable.TABLE_NAME, projection, selection, selectionArgs,
                         null, null, sortOrder);
                 break;
             case PERSON_ONE:
                 long id = ContentUris.parseId(uri);
-                cursor = db.query(Person.TABLE_NAME, projection, "_id=?", new String[]{id + ""},
+                cursor = db.query(PersonTable.TABLE_NAME, projection, "_id=?", new String[]{id + ""},
                         null, null, null);
             default:
                 throw new UnsupportedOperationException("unknown uri: " + uri);
@@ -67,7 +67,7 @@ public class PersonContentProvider extends ContentProvider {
         int resultCount;
         switch (sUriMatcher.match(uri)) {
             case PERSON:
-                resultCount = db.delete(Person.TABLE_NAME, selection, selectionArgs);
+                resultCount = db.delete(PersonTable.TABLE_NAME, selection, selectionArgs);
                 break;
             default:
                 throw new UnsupportedOperationException("unknown uri: " + uri);

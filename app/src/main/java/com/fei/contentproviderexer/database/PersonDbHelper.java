@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
-import com.fei.contentproviderexer.database.PersonContract.Person;
+import com.fei.contentproviderexer.database.PersonContract.PersonTable;
 
 
 /**
@@ -20,10 +20,10 @@ public class PersonDbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         Log.d(TAG, "onCreate: ............................");
-        db.execSQL("create table " + Person.TABLE_NAME + "(" +
-                PersonContract.Person._ID + " integer primary key autoincrement," +
-                PersonContract.Person.COLUMN_NAME + " varchar(40)," +
-                Person.COLUMN_NUMBER + " varchar(40)" +
+        db.execSQL("create table " + PersonTable.TABLE_NAME + "(" +
+                PersonTable._ID + " integer primary key autoincrement," +
+                PersonTable.COLUMN_NAME + " varchar(40)," +
+                PersonTable.COLUMN_NUMBER + " varchar(40)" +
                 ")"
         );
 

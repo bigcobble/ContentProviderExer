@@ -3,12 +3,18 @@ package com.fei.contentproviderexer;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
-import com.fei.contentproviderexer.database.PersonContract.Person;
+import com.fei.contentproviderexer.bean.Person;
+import com.fei.contentproviderexer.database.PersonContract;
+import com.fei.contentproviderexer.database.PersonContract.PersonTable;
 import com.fei.contentproviderexer.database.PersonDao;
 
 import java.util.ArrayList;
@@ -16,8 +22,8 @@ import java.util.List;
 
 public class PersonInfoListActivity extends AppCompatActivity {
     private static final String TAG = "PersonInfoListActivity";
-    private List<String> mPersonInfoList = new ArrayList<>();
-    private ArrayAdapter<String> mAdapter;
+    private List<Person> mPersonInfoList = new ArrayList<>();
+    private PersonAdapter mAdapter;
     private ListView mListView;
 
     @Override
@@ -30,7 +36,7 @@ public class PersonInfoListActivity extends AppCompatActivity {
     }
 
     private void setupAdapter() {
-        Cursor c = getContentResolver().query(Person.CONTENT_URI, null, null, null,
+        Cursor c = getContentResolver().query(PersonContract.PersonTable.CONTENT_URI, null, null, null,
                 null);
         if (c == null) {
             return;
@@ -39,14 +45,14 @@ public class PersonInfoListActivity extends AppCompatActivity {
             mPersonInfoList = new ArrayList<>();
         } else {
             while (c.moveToNext()) {
-                String info = c.getString(c.getColumnIndex(Person.COLUMN_NAME)) + " : " +
-                        c.getString(c.getColumnIndex(Person.COLUMN_NUMBER));
-                mPersonInfoList.add(info);
+                String name = c.getString(c.getColumnIndex(PersonTable.COLUMN_NAME));
+                String number = c.getString(c.getColumnIndex(PersonContract.PersonTable.COLUMN_NUMBER));
+                Person person = new Person(name, number);
+                mPersonInfoList.add(person);
             }
         }
 
-        mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
-                mPersonInfoList);
+        mAdapter = new PersonAdapter(mPersonInfoList);
         mListView.setAdapter(mAdapter);
     }
 
@@ -64,7 +70,7 @@ public class PersonInfoListActivity extends AppCompatActivity {
                 setupAdapter();
                 break;
             case R.id.activity_person_info_delete_all:
-                getContentResolver().delete(Person.CONTENT_URI, null, null);
+                getContentResolver().delete(PersonTable.CONTENT_URI, null, null);
                 setupAdapter();
                 break;
             default:
@@ -73,4 +79,29 @@ public class PersonInfoListActivity extends AppCompatActivity {
 
         return true;
     }
+
+    private class PersonAdapter extends ArrayAdapter<Person> {
+        public PersonAdapter(List<Person> persons) {
+            super(PersonInfoListActivity.this, R.layout.list_item_person, persons);
+        }
+
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            if (convertView == null) {
+                convertView = LayoutInflater.from(PersonInfoListActivity.this).inflate(
+                        R.layout.list_item_person, parent, false);
+            }
+
+            Person person = getItem(position);
+            TextView nameTextView = (TextView) convertView.findViewById(
+                    R.id.list_item_person_name_text_view);
+            nameTextView.setText(person.getName());
+            TextView numberTextView = (TextView) convertView.findViewById(
+                    R.id.list_item_person_number_text_view);
+            numberTextView.setText(person.getNumber());
+
+            return convertView;
+        }
+    }
+
 }
