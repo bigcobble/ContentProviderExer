@@ -3,7 +3,6 @@ package com.fei.contentproviderexer;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -36,11 +35,16 @@ public class PersonInfoListActivity extends AppCompatActivity {
         if (c == null) {
             return;
         }
-        while (c.moveToNext()) {
-            String info = c.getString(c.getColumnIndex(Person.COLUMN_NAME)) + " : " +
-                    c.getString(c.getColumnIndex(Person.COLUMN_NUMBER));
-            mPersonInfoList.add(info);
+        if (c.getCount() == 0) {
+            mPersonInfoList = new ArrayList<>();
+        } else {
+            while (c.moveToNext()) {
+                String info = c.getString(c.getColumnIndex(Person.COLUMN_NAME)) + " : " +
+                        c.getString(c.getColumnIndex(Person.COLUMN_NUMBER));
+                mPersonInfoList.add(info);
+            }
         }
+
         mAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1,
                 mPersonInfoList);
         mListView.setAdapter(mAdapter);
@@ -60,10 +64,8 @@ public class PersonInfoListActivity extends AppCompatActivity {
                 setupAdapter();
                 break;
             case R.id.activity_person_info_delete_all:
-                int count = getContentResolver().delete(Person.CONTENT_URI, null, null);
-                Log.d(TAG, "onOptionsItemSelected: delete :" + count + " records............");
+                getContentResolver().delete(Person.CONTENT_URI, null, null);
                 setupAdapter();
-                mListView.invalidate();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
