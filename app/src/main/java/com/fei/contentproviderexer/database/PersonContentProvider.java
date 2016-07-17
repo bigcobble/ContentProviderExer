@@ -8,6 +8,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.fei.contentproviderexer.database.PersonContract.Person;
 
@@ -15,6 +16,7 @@ import com.fei.contentproviderexer.database.PersonContract.Person;
  * Created by lee on 2016/7/14.
  */
 public class PersonContentProvider extends ContentProvider {
+    private static final String TAG = "PersonContentProvider";
     private static final int PERSON = 0;
     private static final int PERSON_ONE = 1;
     private PersonDbHelper mDbHelper;
@@ -60,7 +62,17 @@ public class PersonContentProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        return 0;
+        Log.d(TAG, "delete: ................");
+        SQLiteDatabase db = mDbHelper.getWritableDatabase();
+        int resultCount;
+        switch (sUriMatcher.match(uri)) {
+            case PERSON:
+                resultCount = db.delete(Person.TABLE_NAME, selection, selectionArgs);
+                break;
+            default:
+                throw new UnsupportedOperationException("unknown uri: " + uri);
+        }
+        return resultCount;
     }
 
     @Override

@@ -30,8 +30,8 @@ public class PersonDao {
         int returnCount = 0;
         db.beginTransaction();
         try {
+            ContentValues cv = new ContentValues();
             for (int i = 0; i < 20; i++) {
-                ContentValues cv = new ContentValues();
                 cv.put(Person.COLUMN_NAME, "lsx" + i);
                 cv.put(Person.COLUMN_NUMBER, "123" + i);
                 long id = db.insert(Person.TABLE_NAME, null, cv);

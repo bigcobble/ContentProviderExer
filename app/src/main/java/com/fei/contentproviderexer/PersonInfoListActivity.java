@@ -3,6 +3,7 @@ package com.fei.contentproviderexer;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
@@ -15,6 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PersonInfoListActivity extends AppCompatActivity {
+    private static final String TAG = "PersonInfoListActivity";
     private List<String> mPersonInfoList = new ArrayList<>();
     private ArrayAdapter<String> mAdapter;
     private ListView mListView;
@@ -56,7 +58,12 @@ public class PersonInfoListActivity extends AppCompatActivity {
             case R.id.activity_person_info_bulk_add:
                 new PersonDao(this).bulkInsertPerson();
                 setupAdapter();
-
+                break;
+            case R.id.activity_person_info_delete_all:
+                int count = getContentResolver().delete(Person.CONTENT_URI, null, null);
+                Log.d(TAG, "onOptionsItemSelected: delete :" + count + " records............");
+                setupAdapter();
+                mListView.invalidate();
                 break;
             default:
                 return super.onOptionsItemSelected(item);
