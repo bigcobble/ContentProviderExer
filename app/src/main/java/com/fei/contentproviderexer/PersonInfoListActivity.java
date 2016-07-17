@@ -87,21 +87,32 @@ public class PersonInfoListActivity extends AppCompatActivity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+            ViewHolder viewHolder;
             if (convertView == null) {
+                viewHolder = new ViewHolder();
                 convertView = LayoutInflater.from(PersonInfoListActivity.this).inflate(
                         R.layout.list_item_person, parent, false);
+                viewHolder.nameTextView = (TextView) convertView.findViewById(
+                        R.id.list_item_person_name_text_view);
+                viewHolder.numberTextView = (TextView) convertView.findViewById(
+                        R.id.list_item_person_number_text_view);
+                convertView.setTag(viewHolder);
+            } else {
+                viewHolder = (ViewHolder) convertView.getTag();
             }
 
             Person person = getItem(position);
-            TextView nameTextView = (TextView) convertView.findViewById(
-                    R.id.list_item_person_name_text_view);
-            nameTextView.setText(person.getName());
-            TextView numberTextView = (TextView) convertView.findViewById(
-                    R.id.list_item_person_number_text_view);
-            numberTextView.setText(person.getNumber());
+            viewHolder.nameTextView.setText(person.getName());
+            viewHolder.numberTextView.setText(person.getNumber());
 
             return convertView;
         }
+
+        class ViewHolder {
+            TextView nameTextView;
+            TextView numberTextView;
+        }
+
     }
 
 }
